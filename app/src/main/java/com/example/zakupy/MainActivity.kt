@@ -19,6 +19,66 @@ class MainActivity : AppCompatActivity() {
             "Pieczywo" to listOf("Kajzerka", "Bochen", "Bułka")
         )
 
+        fun Usuwanie() {
+            val checkboxesLayout = findViewById<View>(R.id.checkboxesLayout)
+            val chipsLayout = findViewById<View>(R.id.chipsLayout)
+
+            checkboxesLayout.visibility = View.GONE
+            chipsLayout.visibility = View.VISIBLE
+
+            val GrupaChip = findViewById<ChipGroup>(R.id.chipsGroup)
+            GrupaChip.removeAllViews()
+
+            for ((groupName, items) in PrzedmiotyKoszyk) {
+                for (item in items) {
+                    if (WybraneArtykuły.contains(item)) {
+                        val chip = Chip(this)
+                        chip.text = item
+                        chip.isCloseIconVisible = true
+                        chip.tag = groupName
+
+                        when (groupName) {
+                            "Warzywa" -> {
+                                chip.chipBackgroundColor =
+                                    resources.getColorStateList(R.color.Warzywa)
+                            }
+                            "Mięso" -> {
+                                chip.chipBackgroundColor =
+                                    resources.getColorStateList(R.color.Mieso)
+                            }
+                            "Pieczywo" -> {
+                                chip.chipBackgroundColor =
+                                    resources.getColorStateList(R.color.Pieczywo)
+                            }
+                        }
+                        GrupaChip.addView(chip)
+
+                        chip.setOnCloseIconClickListener {
+                            WybraneArtykuły.remove(item)
+                            GrupaChip.removeView(chip)
+                        }
+                    }
+                }
+            }
+        }
+
+        fun Dodawanie() {
+            val LayoutCheckbox = findViewById<View>(R.id.checkboxesLayout)
+            val LayoutChip = findViewById<View>(R.id.chipsLayout)
+
+            LayoutCheckbox.visibility = View.VISIBLE
+            LayoutChip.visibility = View.GONE
+        }
+
+        val GrupaRadio = findViewById<RadioGroup>(R.id.radioGroup)
+
+        GrupaRadio.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.Dodawanie -> Dodawanie()
+                R.id.Usuwanie -> Usuwanie()
+            }
+        }
+
 
     }
 }
